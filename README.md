@@ -1,11 +1,11 @@
-# Create a JavaScript Action
+# Create a TypeScript Action
 
 [![GitHub Super-Linter](https://github.com/actions/javascript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
 ![CI](https://github.com/actions/javascript-action/actions/workflows/ci.yml/badge.svg)
 
-Use this template to bootstrap the creation of a JavaScript action. :rocket:
+Use this template to bootstrap the creation of a TypeScript action. :rocket:
 
-This template includes compilation support, tests, a validation workflow,
+This template includes TypeScript compilation support, Vitest for testing, a validation workflow,
 publishing, and versioning guidance.
 
 If you are new, there's also a simpler introduction in the
@@ -40,7 +40,7 @@ need to perform some initial setup steps before you can develop your action.
 > [`nodenv`](https://github.com/nodenv/nodenv),
 > [`nvm`](https://github.com/nvm-sh/nvm) or [`fnm`](https://github.com/Schniz/fnm), you can run `nodenv install` in the
 > root of your repository to install the version specified in
-> [`package.json`](./package.json). Otherwise, 20.x or later should work!
+> [`.node-version`](./.node-version). Otherwise, 20.x or later should work!
 
 1. :hammer_and_wrench: Install the dependencies
 
@@ -48,7 +48,7 @@ need to perform some initial setup steps before you can develop your action.
    pnpm install
    ```
 
-1. :building_construction: Package the JavaScript for distribution
+1. :building_construction: Package the TypeScript for distribution
 
    ```bash
    pnpm run bundle
@@ -59,10 +59,10 @@ need to perform some initial setup steps before you can develop your action.
    ```bash
    $ pnpm test
 
-   PASS  ./index.test.js
-     ✓ throws invalid number (3ms)
-     ✓ wait 500 ms (504ms)
-     ✓ test runs (95ms)
+   PASS  <test-file-path>
+     ✓ throws invalid number
+     ✓ wait 500 ms
+     ✓ test runs
 
    ...
    ```
@@ -79,19 +79,19 @@ inputs, and outputs for your action.
 ## Update the Action Code
 
 The [`src/`](./src/) directory is the heart of your action! This contains the
-source code that will be run when your action is invoked. You can replace the
+TypeScript source code that will be run when your action is invoked. You can replace the
 contents of this directory with your own code.
 
 There are a few things to keep in mind when writing your action code:
 
 - Most GitHub Actions toolkit and CI/CD operations are processed asynchronously.
-  In `main.js`, you will see that the action is run in an `async` function.
+  In `main.ts`, you will see that the action is run in an `async` function.
 
-  ```javascript
-  const core = require('@actions/core')
+  ```typescript
+  import * as core from '@actions/core'
   //...
 
-  async function run() {
+  async function run(): Promise<void> {
     try {
       //...
     } catch (error) {
@@ -116,22 +116,19 @@ So, what are you waiting for? Go ahead and start customizing your action!
 1. Format, test, and build the action
 
    ```bash
-   npm run all
+   pnpm run all
    ```
 
-   > This step is important! It will run [`ncc`](https://github.com/vercel/ncc)
-   > to build the final JavaScript action code with all dependencies included.
+   > This step is important! It will run Rollup to bundle your TypeScript code with all dependencies included.
    > If you do not run this step, your action will not work correctly when it is
-   > used in a workflow. This step also includes the `--license` option for
-   > `ncc`, which will create a license file for all of the production node
-   > modules used in your project.
+   > used in a workflow.
 
 1. (Optional) Test your action locally
 
    The [`@github/local-action`](https://github.com/github/local-action) utility
    can be used to test your action locally. It is a simple command-line tool
    that "stubs" (or simulates) the GitHub Actions Toolkit. This way, you can run
-   your JavaScript action locally without having to commit and push your changes
+   your TypeScript action locally without having to commit and push your changes
    to a repository.
 
    The `local-action` utility can be run in the following ways:
@@ -144,8 +141,11 @@ So, what are you waiting for? Go ahead and start customizing your action!
    - Terminal/Command Prompt
 
      ```bash
-     # npx @github/local action <action-yaml-path> <entrypoint> <dotenv-file>
-     npx @github/local-action . src/main.js .env
+     # Use the convenience script
+     pnpm run local-action
+     
+     # Or run directly
+     pnpm dlx @github/local-action . src/main.ts .env
      ```
 
    You can provide a `.env` file to the `local-action` CLI to set environment
@@ -186,7 +186,7 @@ action in the same repository.
 steps:
   - name: Checkout
     id: checkout
-    uses: actions/checkout@v3
+    uses: actions/checkout@v4
 
   - name: Test Local Action
     id: test-action
@@ -266,11 +266,11 @@ update the licenses database. To install Licensed, see the project's
 To update the cached licenses, run the following command:
 
 ```bash
-pnpmx dlx licensed cache
+licensed cache
 ```
 
 To check the status of cached licenses, run the following command:
 
 ```bash
-pnpmx dlx licensed status
+licensed status
 ```
