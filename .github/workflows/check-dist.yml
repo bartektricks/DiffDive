@@ -26,33 +26,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository.
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # Setup Node.js using the version specified in `.node-version`.
-      - name: Setup Node.js
-        id: setup-node
-        uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-          cache: npm
+          cache: 'pnpm'
 
-      # Install dependencies using `npm ci`.
       - name: Install Dependencies
-        id: install
-        run: npm ci
+        run: pnpm install
 
-      # Build the `dist/` directory.
       - name: Build dist/ Directory
-        id: build
-        run: npm run bundle
+        run: pnpm run bundle
 
-      # This will fail the workflow if the `dist/` directory is different than
-      # expected.
       - name: Compare Directories
-        id: diff
         run: |
           if [ ! -d dist/ ]; then
             echo "Expected dist/ directory does not exist.  See status below:"
@@ -65,11 +56,8 @@ jobs:
             exit 1
           fi
 
-      # If `dist/` was different than expected, upload the expected version as a
-      # workflow artifact.
       - if: ${{ failure() && steps.diff.outcome == 'failure' }}
         name: Upload Artifact
-        id: upload
         uses: actions/upload-artifact@v4
         with:
           name: dist

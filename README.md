@@ -37,27 +37,27 @@ need to perform some initial setup steps before you can develop your action.
 >
 > You'll need to have a reasonably modern version of
 > [Node.js](https://nodejs.org) handy. If you are using a version manager like
-> [`nodenv`](https://github.com/nodenv/nodenv) or
-> [`nvm`](https://github.com/nvm-sh/nvm), you can run `nodenv install` in the
+> [`nodenv`](https://github.com/nodenv/nodenv),
+> [`nvm`](https://github.com/nvm-sh/nvm) or [`fnm`](https://github.com/Schniz/fnm), you can run `nodenv install` in the
 > root of your repository to install the version specified in
 > [`package.json`](./package.json). Otherwise, 20.x or later should work!
 
 1. :hammer_and_wrench: Install the dependencies
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 1. :building_construction: Package the JavaScript for distribution
 
    ```bash
-   npm run bundle
+   pnpm run bundle
    ```
 
 1. :white_check_mark: Run the tests
 
    ```bash
-   $ npm test
+   $ pnpm test
 
    PASS  ./index.test.js
      ✓ throws invalid number (3ms)
@@ -266,11 +266,11 @@ update the licenses database. To install Licensed, see the project's
 To update the cached licenses, run the following command:
 
 ```bash
-licensed cache
+pnpmx dlx licensed cache
 ```
 
 To check the status of cached licenses, run the following command:
 
 ```bash
-licensed status
+pnpmx dlx licensed status
 ```
